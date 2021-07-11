@@ -13,7 +13,7 @@ const updateChannel = async () => {
     // Fetch statistics from mcapi.us
     const res = await fetch(`https://mcapi.us/server/status?ip=${config.ipAddress}${config.port ? `&port=${config.port}` : ''}`)
     if (!res) {
-        const statusChannelName = `【🛡】Status: Offline`
+        const statusChannelName = `【🛡】Status: Hors ligne`
         client.channels.cache.get(config.statusChannel).setName(statusChannelName)
         return false
     }
@@ -24,10 +24,10 @@ const updateChannel = async () => {
     const players = body.players.now
 
     // Get the server status
-    const status = (body.online ? "Online" : "Offline")
+    const status = (body.online ? "En ligne" : "Hors ligne")
 
     // Generate channel names
-    const playersChannelName = `【👥】Players: ${players}`
+    const playersChannelName = `【👥】Joueurs: ${players}`
     const statusChannelName = `【🛡】Status: ${status}`
 
     // Update channel names
@@ -48,19 +48,19 @@ client.on('message', async (message) => {
 
     if(message.content === `${config.prefix}force-update`){
         if (!message.member.hasPermission('MANAGE_MESSAGES')) {
-            return message.channel.send('Only server moderators can run this command!')
+            return message.channel.send('Seuls les modérateurs du serveur peuvent exécuter cette commande !')
         }
-        const sentMessage = await message.channel.send("Updating the channels, please wait...")
+        const sentMessage = await message.channel.send("Mise à jour des salons, veuillez patienter...")
         await updateChannel()
-        sentMessage.edit("Channels were updated successfully!")
+        sentMessage.edit("Les salons ont été mises à jour avec succès!")
     }
 
     if(message.content === `${config.prefix}stats`){
-        const sentMessage = await message.channel.send("Fetching statistics, please wait...")
+        const sentMessage = await message.channel.send("Récupération des statistiques, veuillez patienter...")
 
         // Fetch statistics from mcapi.us
         const res = await fetch(`https://mcapi.us/server/status?ip=${config.ipAddress}${config.port ? `&port=${config.port}` : ''}`)
-        if (!res) return message.channel.send(`Looks like your server is not reachable... Please verify it's online and it isn't blocking access!`)
+        if (!res) return message.channel.send(`Il semble que votre serveur ne soit pas accessible... Veuillez vérifier qu'il est en ligne et qu'il ne bloque pas l'accès!`)
         // Parse the mcapi.us response
         const body = await res.json()
 
@@ -71,15 +71,15 @@ client.on('message', async (message) => {
             .attachFiles(attachment)
             .setThumbnail("attachment://icon.png")
             .addField("Version", body.server.name)
-            .addField("Connected", `${body.players.now} players`)
-            .addField("Maximum", `${body.players.max} players`)
-            .addField("Status", (body.online ? "Online" : "Offline"))
+            .addField("Connectés", `${body.players.now} joueurs`)
+            .addField("Maximum", `${body.players.max} joueurs`)
+            .addField("Status", (body.online ? "En ligne" : "Hors ligne"))
             .setColor("#FF0000")
             .setFooter("Open Source Minecraft Discord Bot")
         
-        sentMessage.edit(`:chart_with_upwards_trend: Here are the stats for **${config.ipAddress}**:`, { embed })
+        sentMessage.edit(`:chart_with_upwards_trend: Voici les statistiques de **${config.ipAddress}**:`, { embed })
     }
 
 })
 
-client.login(config.token)
+client.login(process.env.TOKEN)

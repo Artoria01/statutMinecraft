@@ -1,0 +1,12 @@
+{
+
+    "token": "your discord bot token",
+
+    "ipAddress": "play.pixelplatine.tk",
+    "port": "26073",
+    "playersChannel": "863795864102240267",
+    "statusChannel": "863796139819401256",
+    "updateInterval": "11min",
+
+    "prefix": "m="
+}
