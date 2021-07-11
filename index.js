@@ -13,7 +13,7 @@ const updateChannel = async () => {
     // Fetch statistics from mcapi.us
     const res = await fetch(`https://mcapi.us/server/status?ip=${config.ipAddress}${config.port ? `&port=${config.port}` : ''}`)
     if (!res) {
-        const statusChannelName = `【🛡】Status: Hors ligne`
+        const statusChannelName = `【📡】Status: Hors ligne`
         client.channels.cache.get(config.statusChannel).setName(statusChannelName)
         return false
     }
@@ -27,8 +27,8 @@ const updateChannel = async () => {
     const status = (body.online ? "En ligne" : "Hors ligne")
 
     // Generate channel names
-    const playersChannelName = `【👥】Joueurs: ${players}`
-    const statusChannelName = `【🛡】Status: ${status}`
+    const playersChannelName = `【⛄】Joueurs: ${players}`
+    const statusChannelName = `【📡】Status: ${status}`
 
     // Update channel names
     client.channels.cache.get(config.playersChannel).setName(playersChannelName)
